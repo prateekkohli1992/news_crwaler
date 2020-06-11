@@ -1,4 +1,6 @@
+import hashlib
 import html
+import json
 import re
 
 import scrapy
@@ -21,11 +23,16 @@ class NewsCrawler(scrapy.Spider):
 
     def __init__(self, pages=3, start=1, **kwargs):
         self.start_urls = ['https://www.moneycontrol.com/news/business/']
-        urls = ['https://www.moneycontrol.com/news/business/']
+        with open('./newscrawler/moneycontrol.json') as f:
+            data = json.load(f)
 
+        urls = list(data.values())
+        self.start_urls.extend(list(data.values())[1:])
         for a in urls:
-            for b in range(int(start)+1, int(pages) + 1):
+            for b in range(int(start) + 1, int(pages) + 1):
                 self.start_urls.extend([a + "page-" + str(b)])
+        # print("______________=---------------------------------------------")
+        # print(self.start_urls)
 
         super().__init__(**kwargs)  # python3
 
@@ -102,8 +109,8 @@ class NewsCrawler(scrapy.Spider):
         else:
             bread_crum = ''
 
-
-        items['key_page']=response.url.split("/")[-1]
+        hash_object = hashlib.md5(response.url.split("/")[-1].replace("html", "").replace("html", "").encode('utf-8'))
+        items['key_page'] = hash_object.hexdigest()
         items['date'] = date
         items['blogger_name'] = blogger_name
         items['art_tittle'] = art_tittle

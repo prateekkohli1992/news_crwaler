@@ -15,8 +15,8 @@ class NewscrawlerPipeline:
             'localhost',
             27017
         )
-        db = self.conn['news_test']
-        self.collection = db["news_articles"]
+        db = self.conn['news_mc']
+        self.collection = db["news_mc_data"]
 
     def process_item(self, item, spider):
         self.collection.insert(dict(item))

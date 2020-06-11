@@ -1,0 +1,22 @@
+{
+  "business": "https://www.moneycontrol.com/news/business/",
+  "markets": "https://www.moneycontrol.com/news/business/markets/",
+  "stocks": "https://www.moneycontrol.com/news/business/stocks/",
+  "economy": "https://www.moneycontrol.com/news/business/economy/",
+  "recommendations": "https://www.moneycontrol.com/news/tags/recommendations.html",
+  "macro": "https://www.moneycontrol.com/news/tags/macro.html",
+  "companies": "https://www.moneycontrol.com/news/tags/companies.html",
+  "sector-wise": "https://www.moneycontrol.com/news/tags/sector-analysis.html",
+  "research": "https://www.moneycontrol.com/news/business/moneycontrol-research/",
+  "mutual-funds": "https://www.moneycontrol.com/news/business/mutual-funds/",
+  "personal-finance": "https://www.moneycontrol.com/news/business/personal-finance/",
+  "real-estate": "https://www.moneycontrol.com/real-estate-property/",
+  "auto": "https://www.moneycontrol.com/real-estate-property/",
+  "ipo": "https://www.moneycontrol.com/news/business/ipo/",
+  "politics": "https://www.moneycontrol.com/news/politics/",
+  "news_india": "https://www.moneycontrol.com/news/india/",
+  "technology": "https://www.moneycontrol.com/news/technology/",
+  "fintech": "https://www.moneycontrol.com/news/fintech/",
+  "startups": "https://www.moneycontrol.com/news/business/startups/"
+}
+
