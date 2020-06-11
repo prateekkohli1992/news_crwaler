@@ -19,4 +19,5 @@ class NewscrawlerItem(scrapy.Item):
     content_tags = scrapy.Field()
     bread_crum = scrapy.Field()
     key_page = scrapy.Field()
+    url = scrapy.Field()
     pass

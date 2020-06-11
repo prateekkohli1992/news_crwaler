@@ -50,67 +50,100 @@ class NewsCrawler(scrapy.Spider):
 
         rege = r'((\b\d{1,2}\D{0,3})?\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|(Nov|Dec)(?:ember)?)\D?)(\d{1,2}(st|nd|rd|th)?)?((\s*[,.\-\/]\s*)\D?)?\s*((19[0-9]\d|20\d{2})|\d{2}).*(IST|AM|\d{1,2})'
         items = NewscrawlerItem()
-        date = response.css("#page1 .arttidate::text").extract_first().strip()
-        if date is None:
-            date = ""
-        else:
-            date_clean = re.search(rege, date)
-            if date_clean[0] is not None:
-                date = date_clean[0]
+        try:
+            date = response.css(".arttidate::text").extract_first().strip()
+        except:
+            date = "error"
 
-        blogger_name = response.css("#page1 .bloger-name::text")
+        try:
+            if date is None:
+                date = ""
+            else:
+                date_clean = re.search(rege, date)
+                if date_clean is not None:
+                    date = date_clean[0]
+        except:
 
-        if blogger_name is not None and len(blogger_name) > 0:
-            blogger_name = response.css("#page1 .bloger-name::text").extract_first().strip()
-            blogger_name = re.sub("\s\s+", " ", blogger_name)
-            if blogger_name == '':
-                blogger_name = response.css("#page1 .bloger-name a::text")
-                if len(blogger_name) > 0:
-                    blogger_name = response.css("#page1 .bloger-name a::text").extract_first().strip()
-                    blogger_name = re.sub("\s\s+", " ", blogger_name)
-                else:
-                    blogger_name = ""
-        else:
-            blogger_name = ""
+            try:
+                date = response.css("#page1 .arttidate::text").extract_first().strip()
+            except:
+                date = "error"
 
-        art_tittle = response.css("#page1 .artTitle::text")
+        try:
+            blogger_name = response.css(".bloger-name::text")
 
-        if art_tittle is not None and len(art_tittle) > 0:
-            art_tittle = striphtml(art_tittle.extract_first().strip())
-        else:
-            art_tittle = ""
+            if blogger_name is not None and len(blogger_name) > 0:
+                blogger_name = response.css("#page1 .bloger-name::text").extract_first().strip()
+                blogger_name = re.sub("\s\s+", " ", blogger_name)
+                if blogger_name == '':
+                    blogger_name = response.css("#page1 .bloger-name a::text")
+                    if len(blogger_name) > 0:
+                        blogger_name = response.css("#page1 .bloger-name a::text").extract_first().strip()
+                        blogger_name = re.sub("\s\s+", " ", blogger_name)
+                    else:
+                        blogger_name = ""
+            else:
+                blogger_name = ""
+        except:
+            blogger_name = "error"
 
-        art_subtittle = response.css("#page1 .subhead::text")
+        try:
+            art_tittle = response.css(".artTitle::text")
 
-        if art_subtittle is not None and len(art_subtittle) > 0:
-            art_subtittle = striphtml(art_subtittle.extract_first().strip())
-        else:
-            art_subtittle = ""
+            if art_tittle is not None and len(art_tittle) > 0:
+                art_tittle = striphtml(art_tittle.extract_first().strip())
+            else:
+                art_tittle = ""
+        except:
+            art_tittle = "error"
+        try:
+            art_subtittle = response.css(".subhead::text")
 
-        content_text = response.css("#page1 #article-main p")
+            if art_subtittle is not None and len(art_subtittle) > 0:
+                art_subtittle = striphtml(art_subtittle.extract_first().strip())
+            else:
+                art_subtittle = ""
+        except:
+            art_subtittle = "error"
 
-        if content_text is not None and len(content_text) > 0:
-            content_text = " ".join(
-                [striphtml(a.extract().strip()).strip() for a in response.css("#page1 #article-main p")]).strip()
-        else:
-            content_text = ''
+        try:
+            content_text = response.css("#article-main p")
 
-        content_tags = response.css("#page1 .tag_txt a::text")
+            if content_text is not None and len(content_text) > 0:
+                content_text = " ".join(
+                    [striphtml(a.extract().strip()).strip() for a in response.css("#page1 #article-main p")]).strip()
+            else:
+                content_text = ''
+        except:
+            content_text = "error"
 
-        if content_tags is not None and len(content_tags) > 0:
-            content_tags = ",".join([a.extract().strip() for a in response.css("#page1 .tag_txt a::text")])
-        else:
-            content_tags = ''
+        try:
+            content_tags = response.css(".tag_txt a::text")
 
-        bread_crum = response.css(".brad_crum a::text")
+            if content_tags is not None and len(content_tags) > 0:
+                content_tags = ",".join([a.extract().strip() for a in response.css("#page1 .tag_txt a::text")])
+            else:
+                content_tags = ''
+        except:
+            content_tags = 'error'
 
-        if bread_crum is not None and len(bread_crum) > 0:
-            bread_crum = ",".join([a.extract().strip() for a in response.css(".brad_crum a::text")])
-        else:
-            bread_crum = ''
+        try:
+            bread_crum = response.css(".brad_crum a::text")
+
+            if bread_crum is not None and len(bread_crum) > 0:
+                bread_crum = ",".join([a.extract().strip() for a in response.css(".brad_crum a::text")])
+            else:
+                bread_crum = ''
+        except:
+            bread_crum = 'error'
+
+
+
+
 
         hash_object = hashlib.md5(response.url.split("/")[-1].replace("html", "").replace("html", "").encode('utf-8'))
         items['key_page'] = hash_object.hexdigest()
+        items['url'] = response.url
         items['date'] = date
         items['blogger_name'] = blogger_name
         items['art_tittle'] = art_tittle
@@ -118,6 +151,5 @@ class NewsCrawler(scrapy.Spider):
         items['content_text'] = content_text
         items['content_tags'] = content_tags
         items['bread_crum'] = bread_crum
-        print("_________________")
-        print(items)
+
         yield items
