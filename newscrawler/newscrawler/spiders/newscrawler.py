@@ -46,7 +46,7 @@ class NewsCrawler(scrapy.Spider):
             yield scrapy.Request(url=url.extract().strip(), callback=self.parse_page)
 
     def parse_page(self, response):
-        print("_________________dddddddddddddddddddddddddd")
+        #print("_________________dddddddddddddddddddddddddd")
 
         rege = r'((\b\d{1,2}\D{0,3})?\b(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|(Nov|Dec)(?:ember)?)\D?)(\d{1,2}(st|nd|rd|th)?)?((\s*[,.\-\/]\s*)\D?)?\s*((19[0-9]\d|20\d{2})|\d{2}).*(IST|AM|\d{1,2})'
         items = NewscrawlerItem()
